@@ -17,12 +17,12 @@
   },
   "homepage": "https://github.com/DeveloperLucasjbg/likeDigiW4#readme",
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "three": "^0.181.1"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "three": "^0.182.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.0.4",
-    "vite": "^7.1.11"
+    "@vitejs/plugin-react": "^5.1.4",
+    "vite": "^7.3.1"
   }
 }
