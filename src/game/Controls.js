@@ -26,29 +26,29 @@ class Controls {
   }
 
   getMovementVector() {
-    let x = 0;
-    let z = 0;
+    let horizontal = 0;
+    let vertical = 0;
 
     if (this.pressedKeys.has("a")) {
-      x -= 1;
+      horizontal -= 1;
     }
     if (this.pressedKeys.has("d")) {
-      x += 1;
+      horizontal += 1;
     }
     if (this.pressedKeys.has("w")) {
-      z -= 1;
+      vertical += 1;
     }
     if (this.pressedKeys.has("s")) {
-      z += 1;
+      vertical -= 1;
     }
 
-    if (x !== 0 && z !== 0) {
+    if (horizontal !== 0 && vertical !== 0) {
       const diagonalScale = Math.SQRT1_2;
-      x *= diagonalScale;
-      z *= diagonalScale;
+      horizontal *= diagonalScale;
+      vertical *= diagonalScale;
     }
 
-    return { x, z };
+    return { horizontal, vertical };
   }
 
   dispose() {

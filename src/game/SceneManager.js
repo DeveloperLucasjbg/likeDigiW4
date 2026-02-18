@@ -24,6 +24,12 @@ class SceneManager {
     this.camera.position.copy(this.cameraOffset);
     this.camera.lookAt(this.cameraTarget);
 
+    this.upVector = new THREE.Vector3(0, 1, 0);
+    this.forwardVector = new THREE.Vector3();
+    this.rightVector = new THREE.Vector3();
+    this.worldMovementVector = new THREE.Vector3();
+    this.desiredCameraPosition = new THREE.Vector3();
+
     this.clock = new THREE.Clock();
     this.controls = new Controls(window);
     this.player = new Player(this.scene);
@@ -68,7 +74,8 @@ class SceneManager {
     this.animationFrameId = window.requestAnimationFrame(this.animate);
 
     const deltaTime = this.clock.getDelta();
-    const movementVector = this.controls.getMovementVector();
+    const inputVector = this.controls.getMovementVector();
+    const movementVector = this.convertInputToWorldMovement(inputVector);
 
     this.player.update(deltaTime, movementVector);
     this.updateCamera(deltaTime);
@@ -76,14 +83,41 @@ class SceneManager {
     this.renderer.render(this.scene, this.camera);
   };
 
+  convertInputToWorldMovement(inputVector) {
+    if (inputVector.horizontal === 0 && inputVector.vertical === 0) {
+      return { x: 0, z: 0 };
+    }
+
+    this.camera.getWorldDirection(this.forwardVector);
+    this.forwardVector.y = 0;
+
+    if (this.forwardVector.lengthSq() === 0) {
+      return { x: 0, z: 0 };
+    }
+
+    this.forwardVector.normalize();
+    this.rightVector.crossVectors(this.forwardVector, this.upVector).normalize();
+
+    this.worldMovementVector
+      .set(0, 0, 0)
+      .addScaledVector(this.rightVector, inputVector.horizontal)
+      .addScaledVector(this.forwardVector, inputVector.vertical);
+
+    if (this.worldMovementVector.lengthSq() > 1) {
+      this.worldMovementVector.normalize();
+    }
+
+    return { x: this.worldMovementVector.x, z: this.worldMovementVector.z };
+  }
+
   updateCamera(deltaTime) {
     const smoothStep = 1 - Math.exp(-this.cameraSmoothness * deltaTime);
     const playerPosition = this.player.getPosition();
 
     this.cameraTarget.lerp(playerPosition, smoothStep);
 
-    const desiredPosition = playerPosition.clone().add(this.cameraOffset);
-    this.camera.position.lerp(desiredPosition, smoothStep);
+    this.desiredCameraPosition.copy(this.cameraTarget).add(this.cameraOffset);
+    this.camera.position.lerp(this.desiredCameraPosition, smoothStep);
     this.camera.lookAt(this.cameraTarget);
   }
 
