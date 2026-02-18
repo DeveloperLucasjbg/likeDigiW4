@@ -1,0 +1,45 @@
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #ffffff;
+  background: #000000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.app-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.25rem;
+  background: #000000;
+}
+
+.app-fallback a {
+  color: #7ec8ff;
+}
+
+.run-root {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+}
+
+.run-canvas-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000000;
+}
